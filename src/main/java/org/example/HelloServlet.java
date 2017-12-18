@@ -35,6 +35,6 @@ public class HelloServlet extends HttpServlet {
         out.println(deployInfoContent);
         out.println("</pre>");
 
-        out.println("<img src='http://orig07.deviantart.net/763e/f/2008/366/a/0/homer_yahoo_by_danielgoettig.jpg'>");
+        out.println("<img src='http://cdn2.hubspot.net/hubfs/208250/Blog_Images/DevOps-Infographic-v1.4%20690x690.png'>");
     }
 }
