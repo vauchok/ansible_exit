@@ -1,6 +1,0 @@
-Build time: 11:04
-Build Machine: EPBYMINW2473
-Build User: Ihar_Vauchok
-Git URL: https://git.epam.com/siarhei_beliakou/mntlab-exam/tree/ivauchok
-Git Commit: ExitTask
-Git Branch: ivauchok

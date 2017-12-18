@@ -38,9 +38,10 @@ def main():
     else:
         module.fail_json(msg='This program understand only: started, stopped, destroyed commands', **result)
     result['vm_status'] = v.status()[0].state
+    """
     with open('inventory', 'w') as outfile:
         outfile.close()
-
+    """
     module.exit_json(**result)
 
 
