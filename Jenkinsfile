@@ -1,6 +1,6 @@
 node("${env.SLAVE}") {
   def maven_home = '/opt/apache-maven-3.5.2'
-  def branch_name = 'ivauchok'
+  def branch_name = 'master'
 
   stage('Preparation (Checking out)') {
     checkout scm: [$class: 'GitSCM', branches: [[name: "*/${branch_name}"]], userRemoteConfigs: [[url: 'https://github.com/vauchok/ansible_exit.git']]]
