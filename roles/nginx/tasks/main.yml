@@ -1,0 +1,24 @@
+- name: install nginx
+  yum:
+    name: nginx
+    state: present
+  become: True
+  become_method: sudo
+
+- name: Install nginx.conf
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  notify:
+  - restart nginx
+  become: True
+  become_method: sudo
+
+- name: Start nginx.service
+  systemd:
+    daemon-reload: yes
+    name: nginx
+    enabled: yes
+    state: started
+  become: True
+  become_method: sudo

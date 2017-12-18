@@ -1,0 +1,6 @@
+- name: Install Java
+  yum:
+    name: java-{{java_version}}.0-openjdk
+    state: present
+  become: True
+  become_method: sudo

@@ -1,0 +1,91 @@
+- name: Add group {{tomcat_group}}
+  group:
+    name: "{{tomcat_group}}"
+  become: True
+  become_method: sudo
+
+- name: Add user {{tomcat_user}}
+  user:
+    name: "{{tomcat_user}}"
+    group: "{{tomcat_group}}"
+    createhome: no
+  become: True
+  become_method: sudo
+
+- name: Download Tomcat
+  get_url:
+    url: "{{tomcat[tomcat_version]}}"
+    dest: /opt/apache-tomcat-{{tomcat_version}}.tar.gz
+  become: True
+  become_method: sudo
+
+- name: Creates directory
+  file:
+    path: "{{CATALINA_HOME}}"
+    state: directory
+    owner: "{{tomcat_user}}"
+    group: "{{tomcat_group}}"
+    recurse: yes
+  become: True
+  become_method: sudo
+
+- name: Extract archive
+  unarchive:
+    owner: "{{tomcat_user}}"
+    group: "{{tomcat_group}}"
+    src: /opt/apache-tomcat-{{tomcat_version}}.tar.gz
+    extra_opts: [--strip-component=1]
+    dest: "{{CATALINA_HOME}}"
+    remote_src: yes
+  become: True
+  become_method: sudo
+
+- name: Symlink log directory
+  file:
+    owner: "{{tomcat_user}}"
+    group: "{{tomcat_group}}"
+    src: "{{CATALINA_HOME}}/logs"
+    path: /var/log/tomcat
+    state: link
+  become: True
+  become_method: sudo
+
+- name: Install tomcat.service
+  template:
+    owner: "{{tomcat_user}}"
+    group: "{{tomcat_group}}"
+    src: tomcat.service
+    dest: /etc/systemd/system/tomcat.service
+  notify:
+  - restart tomcat
+  become: True
+  become_method: sudo
+
+- name: Start tomcat.service
+  systemd:
+    daemon-reload: yes
+    name: tomcat
+    enabled: yes
+    state: started
+  become: True
+  become_method: sudo
+
+- name: Copy tomcat-users.xml
+  template:
+    owner: "{{tomcat_user}}"
+    group: "{{tomcat_group}}"
+    src: tomcat-users.xml
+    dest: /opt/tomcat/{{tomcat_version}}/conf/tomcat-users.xml
+  become: True
+  become_method: sudo
+
+- name: Copy manager.xml
+  template:
+    owner: "{{tomcat_user}}"
+    group: "{{tomcat_group}}"
+    src: manager.xml
+    dest: /opt/tomcat/{{tomcat_version}}/conf/Catalina/localhost/manager.xml
+  notify:
+  - restart tomcat
+  become: True
+  become_method: sudo

@@ -1,0 +1,5 @@
+tomcat_user: tomcat_as
+tomcat_group: tomcat_as_group
+tomcat: {7.0.8: 'http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.8/bin/apache-tomcat-7.0.8.tar.gz', 8.5.9: 'http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz', 9.0.1: 'http://archive.apache.org/dist/tomcat/tomcat-9/v9.0.1/bin/apache-tomcat-9.0.1.tar.gz'}
+tomcat_version: "{{tomcat.keys()[1]}}"
+CATALINA_HOME: /opt/tomcat/{{tomcat_version}}

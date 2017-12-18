@@ -1,0 +1,20 @@
+- name : provision VM
+  hosts: localhost
+
+  tasks:
+
+  - name: Using created module
+    vagrant_ssh:
+      path: /var/server/jenkins/slave/workspace/EPBYMINW2473/mntlab-ansible-day-Final
+      state: started
+    register: result
+
+  - name: Output
+    debug:
+      msg: "{{result}}"
+
+  - lineinfile:
+      path: inventory
+      state: present
+      line: "{{result.host}} ansible_ssh_host={{result.ip}} ansible_ssh_port={{result.port}} ansible_ssh_user={{result.username}} ansible_connection=ssh ansible_ssh_private_key_file={{result.key}}"
+

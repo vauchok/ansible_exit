@@ -1,0 +1,17 @@
+[Unit]
+Description=Apache Tomcat {{tomcat_version}} Servlet Container
+After=syslog.target network.target
+
+[Service]
+User={{tomcat_user}}
+Group={{tomcat_group}}
+Type=forking
+Environment=CATALINA_PID=/opt/tomcat/{{tomcat_version}}/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat/{{tomcat_version}}
+Environment=CATALINA_BASE=/opt/tomcat/{{tomcat_version}}
+ExecStart=/opt/tomcat/{{tomcat_version}}/bin/startup.sh
+ExecStop=/opt/tomcat/{{tomcat_version}}/bin/shutdown.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

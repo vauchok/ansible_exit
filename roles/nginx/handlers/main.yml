@@ -1,0 +1,8 @@
+- name: restart nginx
+  systemd:
+    daemon-reload: yes
+    name: nginx
+    state: restarted
+  become: True
+  become_method: sudo
+

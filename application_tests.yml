@@ -1,0 +1,13 @@
+- name: Test Artefact is deployed successfully
+  hosts: all
+
+  post_tasks:
+  - name: Checks that tomcat installed and running properly  
+    command: curl -L http://127.0.0.1:8080/{{url}}
+    register: command_result
+    changed_when: False
+    failed_when: "'Build User: Ihar_Vauchok' not in command_result.stdout"
+
+  - name: Sucsesfull instalation 
+    debug:
+      msg: "Deployment was successful"

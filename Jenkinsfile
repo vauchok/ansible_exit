@@ -1,4 +1,10 @@
 node("${env.SLAVE}") {
+  def maven_home = '/opt/apache-maven-3.5.2'
+  def branch_name = 'ivauchok'
+
+  stage('Preparation (Checking out)') {
+    checkout scm: [$class: 'GitSCM', branches: [[name: "*/${branch_name}"]], userRemoteConfigs: [[url: 'git@git.epam.com:siarhei_beliakou/mntlab-exam.git']]]
+  }
 
   stage("Build"){
     /*
@@ -14,13 +20,15 @@ node("${env.SLAVE}") {
         $ mvn clean package -DbuildNumber=$BUILD_NUMBER
     */
     sh "echo build artefact"
+    sh "${maven_home}/bin/mvn clean package -DbuildNumber=$BUILD_NUMBER"
   }
 
   stage("Package"){
     /*
-        use tar tool to package built war file into *.tar.gz package
+        usew tar tool to package built war file into *.tar.gz package
     */
     sh "echo package artefact"
+  sh "cd target/ && tar -czvf ${BUILD_NUMBER}.tar.gz *.war"
   }
 
   stage("Roll out Dev VM"){
@@ -28,6 +36,7 @@ node("${env.SLAVE}") {
         use ansible to create VM (with developed vagrant module)
     */
     sh "echo ansible-playbook createvm.yml ..."
+    sh "ansible-playbook createvm.yml -i localhost, -c local -vv"
   }
 
   stage("Provision VM"){
@@ -36,6 +45,7 @@ node("${env.SLAVE}") {
         Tomcat and nginx should be installed
     */
     sh "echo ansible-playbook provisionvm.yml ..."
+    sh "ansible-playbook provisionvm.yml -i inventory -vv"
   }
 
   stage("Deploy Artefact"){
@@ -48,6 +58,7 @@ node("${env.SLAVE}") {
         - Deployment Job
     */
     sh "echo ansible-playbook deploy.yml -e artefact=... ..."
+    sh "ansible-playbook deploy.yml -e 'artifact=mnt-exam.war job_name=$JOB_NAME url=exittask'  -i inventory"
   }
 
   stage("Test Artefact is deployed successfully"){
@@ -60,6 +71,7 @@ node("${env.SLAVE}") {
         - Deployment Job
     */
     sh "echo ansible-playbook application_tests.yml -e artefact=... ..."
+    sh "ansible-playbook application_tests.yml -e url=exittask -i inventory "
   }
 
 }

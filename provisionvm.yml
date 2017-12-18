@@ -1,0 +1,7 @@
+- name: Provision VM
+  hosts: all
+ 
+  roles:
+  - java
+  - { role: tomcat, username: tomcat, password: tomcat}
+  - nginx

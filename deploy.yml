@@ -1,0 +1,13 @@
+- name : Deploy
+  hosts: all
+
+  tasks:
+  - name: App_deploy
+    war_deploy:
+      url: "{{url}}"
+      war: "{{artifact}}"
+      username: tomcat
+      password: tomcat
+      job: "{{job_name}}"
+    register: result
+

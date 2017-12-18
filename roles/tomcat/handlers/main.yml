@@ -1,0 +1,7 @@
+- name: restart tomcat 
+  systemd:
+    daemon-reload: yes
+    name: tomcat
+    state: restarted
+  become: True
+  become_method: sudo
