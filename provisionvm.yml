@@ -1,5 +1,6 @@
+- import_playbook: createvm.yml
 - name: Provision VM
-  hosts: all
+  hosts: default
  
   roles:
   - java

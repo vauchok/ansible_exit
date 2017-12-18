@@ -1,5 +1,6 @@
+- import_playbook: createvm.yml
 - name: Test Artefact is deployed successfully
-  hosts: all
+  hosts: default
 
   post_tasks:
   - name: Checks that tomcat installed and running properly  

@@ -1,5 +1,6 @@
+- import_playbook: createvm.yml
 - name : Deploy
-  hosts: all
+  hosts: default
 
   tasks:
   - name: App_deploy

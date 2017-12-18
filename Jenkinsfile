@@ -3,7 +3,7 @@ node("${env.SLAVE}") {
   def branch_name = 'ivauchok'
 
   stage('Preparation (Checking out)') {
-    checkout scm: [$class: 'GitSCM', branches: [[name: "*/${branch_name}"]], userRemoteConfigs: [[url: 'git@git.epam.com:siarhei_beliakou/mntlab-exam.git']]]
+    checkout scm: [$class: 'GitSCM', branches: [[name: "*/${branch_name}"]], userRemoteConfigs: [[url: 'https://github.com/vauchok/ansible_exit.git']]]
   }
 
   stage("Build"){
@@ -45,7 +45,7 @@ node("${env.SLAVE}") {
         Tomcat and nginx should be installed
     */
     sh "echo ansible-playbook provisionvm.yml ..."
-    sh "ansible-playbook provisionvm.yml -i inventory -vv"
+    sh "ansible-playbook provisionvm.yml -vv"
   }
 
   stage("Deploy Artefact"){
@@ -58,7 +58,7 @@ node("${env.SLAVE}") {
         - Deployment Job
     */
     sh "echo ansible-playbook deploy.yml -e artefact=... ..."
-    sh "ansible-playbook deploy.yml -e 'artifact=mnt-exam.war job_name=$JOB_NAME url=exittask'  -i inventory"
+    sh "ansible-playbook deploy.yml -e 'artifact=mnt-exam.war job_name=$JOB_NAME url=exittask'"
   }
 
   stage("Test Artefact is deployed successfully"){
@@ -71,7 +71,7 @@ node("${env.SLAVE}") {
         - Deployment Job
     */
     sh "echo ansible-playbook application_tests.yml -e artefact=... ..."
-    sh "ansible-playbook application_tests.yml -e url=exittask -i inventory "
+    sh "ansible-playbook application_tests.yml -e url=exittask"
   }
 
 }
